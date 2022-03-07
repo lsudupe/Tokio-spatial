@@ -34,8 +34,8 @@ d2.sig <- GeneSet(D2, setName="geneSetD2")
 geneSets <- GeneSetCollection(b.sig, d1.sig, d2.sig)
 
 ###### Download  data
-fibro <- readRDS("../data/integrated.sp.sct.fibro.rds")
-no.fibro <- readRDS("../data/integrated.sp.sct.nofibro.rds")
+fibro <- readRDS("../data/integrated.sp.sct.fibro.new.rds")
+no.fibro <- readRDS("../data/integrated.sp.sct.nofibro.new.rds")
 
 objects <- c(fibro, no.fibro)
 names(objects) <- c("fibro", "no.fibro")
@@ -57,7 +57,7 @@ for (i in 1:length(objects)){
           d1 <- as.vector(auc_per_cell_all$geneSetD1)
           d2 <- as.vector(auc_per_cell_all$geneSetD2)
           d1.d2 <- log10(d1/d2)
-          d1.d2 <-sapply(d1.d2, is.infinite)
+          is.na(d1.d2) <-sapply(d1.d2, is.infinite)
           d1.d2[is.na(d1.d2)] = 0
           auc_per_cell_all$relation_log.d1.d2 <- d1.d2
           ##save meta
