@@ -15,7 +15,7 @@ library("dittoSeq")
 library("dichromat")
 
 ##CHOOSE THE auxMaxRank
-genes.porcentage <- 150 #porcentage depending number of genes in spatial
+genes.porcentage <- 750 #porcentage depending number of genes in spatial
 
 
 ###### Read the gene sets
@@ -50,16 +50,16 @@ for (i in 1:length(objects)){
           ###### AUC score 
           cells_rankings <- AUCell_buildRankings(matrix, nCores=1)#, plotStats=TRUE)
           #rankings <- getRanking(cells_rankings)
-          cells_AUC <- AUCell_calcAUC(geneSets, cells_rankings.f, aucMaxRank=genes.porcentage)
+          cells_AUC <- AUCell_calcAUC(geneSets, cells_rankings, aucMaxRank=genes.porcentage)
           #extract AUC values
           auc_per_cell_all <- as.data.frame(t(getAUC(cells_AUC)))
           #calculate relation d1/d2
           d1 <- as.vector(auc_per_cell_all$geneSetD1)
           d2 <- as.vector(auc_per_cell_all$geneSetD2)
           d1.d2 <- log10(d1/d2)
-          d1.d2(df)<-sapply(d1.d2, is.infinite)
+          d1.d2 <-sapply(d1.d2, is.infinite)
           d1.d2[is.na(d1.d2)] = 0
-          auc_per_cell_all$relation_log(d1.d2) <- d1.d2
+          auc_per_cell_all$relation_log.d1.d2 <- d1.d2
           ##save meta
           a <- AddMetaData(a, auc_per_cell_all)
           ##save object
@@ -85,7 +85,7 @@ no.fibro <- readRDS("./no.fibro.rds")
 bl <- colorRampPalette(c("navy","royalblue","lightskyblue"))(200)                      
 re <- colorRampPalette(c("mistyrose", "red2","darkred"))(200)
 
-feature.list <- c("geneSetB", "geneSetD1","geneSetD2", "relation_log(d1.d2)")
+feature.list <- c("geneSetB", "geneSetD1","geneSetD2", "relation_log.d1.d2")
 
 for (i in feature.list){
   p1 <- SpatialFeaturePlot(fibro, features = i, pt.size.factor = 10, combine = FALSE)
@@ -99,7 +99,7 @@ for (i in feature.list){
 
 #Density plots
 
-dens <- c("geneSetB", "geneSetD1","geneSetD2", "relation_log(d1.d2)", "nCount_SCT")
+dens <- c("geneSetB", "geneSetD1","geneSetD2", "relation_log.d1.d2", "nCount_SCT")
 
 ##fibro
 for (i in dens){
